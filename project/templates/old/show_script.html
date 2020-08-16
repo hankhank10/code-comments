@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Code Comments</title>
+
+
+    <!-- Google JS -->
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.bundle.min.js" integrity="sha512-kBFfSXuTKZcABVouRYGnUo35KKa1FBrYgwG4PAx7Z2Heroknm0ca2Fm2TosdrrI356EDHMW383S3ISrwKcVPUw==" crossorigin="anonymous"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Custom Bootstrap CSS -->
+    <link rel="stylesheet" href="/static/css/grid.css" />
+    <link rel="stylesheet" href="/static/css/bootstrap-side-modals.css" />
+
+    <!-- Prettify CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/css/git.css">
+
+    <!-- Icons -->
+    <script src="https://kit.fontawesome.com/99043d701d.js" crossorigin="anonymous"></script>
+
+    <!-- Markdown editor JS and CSS -->
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+
+</head>
+
+<body>
+<div class="container">
+
+    <h1>View comments on {{filename}}</h1>
+    <p class="lead">{{url}}</p>
+    <p>
+
+<div class="row no-gutters">
+<div class="col-2">
+<pre class="prettyaverage" style="text-align: right; margin-top: 0.1rem">{% for a in range(1,lines_to_display|length+1) %}<span style="color: Grey"><a href="#new_comment_modal" data-toggle="modal" data-target="#new_comment_modal" data-linenumber="{{a}}"><i class="fas fa-plus-circle"></i></a></span><br>{%endfor%}
+</pre>
+</div>
+
+
+<div class="col-10">
+
+<pre class="prettyprint linenums">{% for row in lines_to_display %}
+{{ row.content }}{% endfor %}</pre>
+
+</div>
+
+
+</div>
+
+
+</div> <!-- /container -->
+
+
+<div class="modal left fade" id="new_comment_modal" tabindex="-1" role="dialog" aria-labelledby="new_comment_modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add new comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <textarea id="new_comment"></textarea>
+
+                <script>
+                    new SimpleMDE({
+                        element: document.getElementById("new_comment"),
+                        placeholder: "Type comment here - markdown works...",
+                        status: false,
+                        toolbar: false,
+                    });
+                </script>
+            </div>
+            <div class="modal-footer modal-footer-fixed">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+    $('#new_comment_modal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var linenumber = button.data('linenumber') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this)
+        modal.find('.modal-title').text('New comment on line ' + linenumber)
+
+    })
+</script>
+
+</html>
