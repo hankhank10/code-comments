@@ -60,7 +60,7 @@ def view_script(unique_key, secret_key = None):
             comment = Comment.query.filter_by(line_unique_key = line.unique_key).first()
             comments_to_display.append (comment.unique_key)
 
-    sharing_link = "http://0.0.0.0:1234/view_script/" + unique_key
+    sharing_link = "https://codecomments.dev/view_script/" + unique_key
     if secret_key == None: private_sharing_link = sharing_link
     if secret_key != None: private_sharing_link = sharing_link + "/secret/" + secret_key
 
