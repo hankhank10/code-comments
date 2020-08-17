@@ -37,7 +37,7 @@ from .admin import AdminView
 
 app.config['FLASK_ADMIN_SWATCH'] = 'cosmo'
 
-admin = Admin(app, name='Admin', index_view=AdminView(Script, db.session, url='/admin', endpoint='admin'))
+admin = Admin(app, name='Admin', index_view=AdminView(Script, db.session, url='/adminsupersecret1983', endpoint='admin'))
 admin.add_view(AdminView(Line, db.session))
 admin.add_view(AdminView(Comment, db.session))
 
