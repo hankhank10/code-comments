@@ -36,6 +36,17 @@ def load_script():
     return render_template('index.html', form=form)
 
 
+@main.route('/load_script')
+def load_script_manual():
+    url = request.args.get('url')
+
+    status, script_unique_key, secret_key = backend.download_script(url)
+    if status == "success":
+        return redirect(url_for('main.view_script', unique_key=script_unique_key, secret_key=secret_key))
+    if status != "success":
+        return status
+
+
 @main.route('/view_script/<unique_key>/')
 @main.route('/view_script/<unique_key>/secret/<secret_key>')
 def view_script(unique_key, secret_key = None):
@@ -56,6 +67,8 @@ def view_script(unique_key, secret_key = None):
             comments_to_display.append (comment.unique_key)
 
     sharing_link = "https://codecomments.dev/view_script/" + unique_key
+    #sharing_link = "http://0.0.0.0:1234/view_script/"+unique_key
+
     if secret_key == None: private_sharing_link = sharing_link
     if secret_key != None: private_sharing_link = sharing_link + "/secret/" + secret_key
 

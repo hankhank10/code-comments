@@ -62,7 +62,9 @@
     <h1><a href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a> comments (aka <a href="{{url}}">{{script.unique_key}}</a>) </h1>
     <a class="lead">Original code: <a class="lead" href="https://github.com/{{script.gituser}}">{{script.gituser}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}">{{script.gitrepo}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/tree/{{script.gitbranch}}">{{script.gitbranch}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a></p>
     {% if edit_mode == True %}<p class="lead">You are currently <span data-toggle="tooltip" title="You can add and edit comments" data-placement="bottom" class="badge badge-warning">editing</span> these comments</p>{% endif %}
-        {% if edit_mode == False %}<p class="lead">You are currently <span data-toggle="tooltip" title="If you are the owner of this comment set then click here to enter your secret key" data-placement="bottom" class="badge badge-success">viewing</span> these comments - <a href="#secretkeymodal" data-toggle="modal" data-target="#secretkeymodal">edit if you are the owner</a></p>{% endif %}
+
+    {% if edit_mode == False %}<p class="lead">You are currently <span data-toggle="tooltip" title="If you are the owner of this comment set then click here to enter your secret key" data-placement="bottom" class="badge badge-success">viewing</span> these comments - <a href="#secretkeymodal" data-toggle="modal" data-target="#secretkeymodal">edit if you are the owner</a>
+        or <a href="{{ url_for('main.load_script_manual', url = script.url) }}">create your own comment set</a></p>{% endif %}
 
     {% if edit_mode == True %}
         <p>Public sharing link for this comment set: <a href="{{sharing_link}}">{{sharing_link}}</a><br>
