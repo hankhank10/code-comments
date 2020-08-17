@@ -136,4 +136,4 @@ def stats():
     line_count = Line.query.count()
     comment_count = Comment.query.count()
 
-    return "Scripts :" + script_count + "<br>Lines: " + line_count + "<br>Comments: " + comment_count
+    return "Scripts :" + str(script_count) + "<br>Lines: " + str(line_count) + "<br>Comments: " + str(comment_count)
