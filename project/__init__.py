@@ -14,10 +14,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 bootstrap = Bootstrap(app)
 
-#login_manager = LoginManager()
-#login_manager.login_view = 'auth.login'
-#login_manager.init_app(app)
-
 # db init
 from .models import Script
 from .models import Line
@@ -37,7 +33,7 @@ from .admin import AdminView
 
 app.config['FLASK_ADMIN_SWATCH'] = 'cosmo'
 
-admin = Admin(app, name='Admin', index_view=AdminView(Script, db.session, url='/adminsupersecret1983', endpoint='admin'))
+admin = Admin(app, name='Admin', index_view=AdminView(Script, db.session, url='/admin', endpoint='admin'))
 admin.add_view(AdminView(Line, db.session))
 admin.add_view(AdminView(Comment, db.session))
 

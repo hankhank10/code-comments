@@ -10,16 +10,11 @@ from .forms import Load_Script
 import secrets
 import markdown
 
-from pygments import highlight
-from pygments.lexers import PythonLexer, get_lexer_by_name
-from pygments.formatters import HtmlFormatter
-from pygments.styles import get_style_by_name
-
 main = Blueprint('main', __name__)
 
 
 @main.route('/', methods=['GET', 'POST'])
-def load_script():
+def index():
     form = Load_Script()
 
     # The POST method
@@ -66,19 +61,19 @@ def view_script(unique_key, secret_key = None):
             comment = Comment.query.filter_by(line_unique_key = line.unique_key).first()
             comments_to_display.append (comment.unique_key)
 
-    sharing_link = "https://codecomments.dev/view_script/" + unique_key
-    #sharing_link = "http://0.0.0.0:1234/view_script/"+unique_key
+    sharing_link = "https://codecomments.dev/view_script/" + unique_key  #use for deployment
+    #sharing_link = "http://0.0.0.0:1234/view_script/"+unique_key   #use for local testing
 
     if secret_key == None: private_sharing_link = sharing_link
     if secret_key != None: private_sharing_link = sharing_link + "/secret/" + secret_key
 
     return render_template('show_script.html',
                            script=script_to_display,
-                           lines_to_display = lines_to_display,
-                           comments_to_display = comments_to_display,
-                           edit_mode = edit_mode,
-                           secret_key = secret_key,
-                           sharing_link = sharing_link,
+                           lines_to_display=lines_to_display,
+                           comments_to_display=comments_to_display,
+                           edit_mode=edit_mode,
+                           secret_key=secret_key,
+                           sharing_link=sharing_link,
                            private_sharing_link=private_sharing_link)
 
 
@@ -92,10 +87,10 @@ def add_comment(line_key, secret_key):
 
     if request.method == 'POST':
         new_comment = Comment(
-            line_unique_key = line_key,
-            unique_key = "comment_" + secrets.token_urlsafe(25),
-            line_number = line.line_number,
-            content_comment = request.values.get('comment_contents')
+            line_unique_key=line_key,
+            unique_key="comment_" + secrets.token_urlsafe(25),
+            line_number=line.line_number,
+            content_comment=request.values.get('comment_contents')
         )
 
         db.session.add(new_comment)
@@ -118,6 +113,7 @@ def edit_comment(comment_key, secret_key):
         comment_to_edit.content_comment = request.values.get('comment_contents')
         db.session.commit()
         return redirect(url_for('main.view_script', unique_key=comment_to_edit.script_unique_key(), secret_key=secret_key))
+
 
 @main.route('/view_comment/<comment_key>')
 def view_comment(comment_key):

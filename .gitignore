@@ -4,3 +4,6 @@
 *.iml
 tests/.DS_Store
 project/__pycache__/__init__.cpython-38.pyc
+/tests/
+/project/templates/old/
+.idea/modules.xml
