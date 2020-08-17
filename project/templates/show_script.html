@@ -48,15 +48,13 @@
 <body>
 <div class="container">
 
-    <h1><a href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a> comments (aka <a href="url">{{script.unique_key}}</a>) </h1>
+    <h1><a href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a> comments (aka <a href="{{url}}">{{script.unique_key}}</a>) </h1>
     <a class="lead">Original code: <a class="lead" href="https://github.com/{{script.gituser}}">{{script.gituser}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}">{{script.gitrepo}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/tree/{{script.gitbranch}}">{{script.gitbranch}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a></p>
     {% if edit_mode == True %}<p class="lead">You are currently <span data-toggle="tooltip" title="You can add and edit comments" data-placement="bottom" class="badge badge-warning">editing</span> these comments</p>{% endif %}
         {% if edit_mode == False %}<p class="lead">You are currently <span data-toggle="tooltip" title="If you are the owner of this comment set then click here to enter your secret key" data-placement="bottom" class="badge badge-success">viewing</span> these comments - <a href="#secretkeymodal" data-toggle="modal" data-target="#secretkeymodal">edit if you are the owner</a></p>{% endif %}
 
-
-    <p>Public sharing link for this comment set: <a href="{{sharing_link}}">{{sharing_link}}</a><br>
-
     {% if edit_mode == True %}
+        <p>Public sharing link for this comment set: <a href="{{sharing_link}}">{{sharing_link}}</a><br>
         <b>Private</b> link for this comment set, allowing editing: <a href="{{private_sharing_link}}">{{private_sharing_link}}</a></p>
     {%endif%}
     <p class="lead">{{url}}</p>
@@ -67,7 +65,7 @@
 
 <div class="col-2">
 
-<pre class="prettyaverage" style="text-align: right; margin-top: 0.1rem">{% for row in lines_to_display %}{% if row.has_comment() == False and edit_mode == True %}<a style="color: Gainsboro" href="{{url_for('main.add_comment', line_key=row.unique_key)}}" class='li-modal'><i class="fas fa-plus-circle"></i></a>{%endif%}{% if row.has_comment() == True %}<a href="{{url_for('main.view_comment', comment_key=row.comment_unique_key() )}}" class='li-modal' style="color: Red"><i class="fas fa-comment"></i><i class="fas fa-fw"></i></a>{%endif%}<br>{%endfor%}
+<pre class="prettyaverage" style="text-align: right; margin-top: 0.1rem">{% for row in lines_to_display %}{% if row.has_comment() == False and edit_mode == True %}<a style="color: Gainsboro" href="{{url_for('main.add_comment', line_key=row.unique_key)}}" class='li-modal'><i class="fas fa-plus-circle"></i></a>{%endif%}{% if row.has_comment() == True %}<a href="{%if edit_mode==False%}{{url_for('main.view_comment', comment_key=row.comment_unique_key() )}}{%endif%}{%if edit_mode==True%}{{url_for('main.edit_comment', comment_key=row.comment_unique_key(), secret_key=secret_key)}}{%endif%}" class='li-modal' style="color: Red"><i class="fas fa-comment"></i><i class="fas fa-fw"></i></a>{%endif%}<br>{%endfor%}
 </pre>
 </div>
 
@@ -117,16 +115,17 @@
                 </button>
             </div>
             <div class="modal-body">
-                If you are the owner of this comment set you can edit by entering your secret key
 
-                <input type="text" id="secretkeyinput" />
-                <input type="button" id="btn" value="Submit" onClick="javascript: window.open(window.location.href + '/secret/' + document.getElementById('secretkeyinput').value);" />
+                <div class="form-group">
+                    <label for="secretkeyinput">If you are the owner of this comment set you can edit by entering your secret key</label>
+                    <input type="text" class="form-control" id="secretkeyinput" aria-describedby="secretkeyinput" placeholder="Secret key">
+                </div>
 
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Submit</button>
+                <button type="button" class="btn btn-primary" onClick="javascript: window.open(window.location.href + 'secret/' + document.getElementById('secretkeyinput').value);" >Submit</button>
             </div>
         </div>
     </div>

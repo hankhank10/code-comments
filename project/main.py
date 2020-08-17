@@ -19,12 +19,7 @@ from pygments.styles import get_style_by_name
 main = Blueprint('main', __name__)
 
 
-@main.route('/')
-def index():
-    return "Index"
-
-
-@main.route('/load_script', methods=['GET', 'POST'])
+@main.route('/', methods=['GET', 'POST'])
 def load_script():
     form = Load_Script()
 
@@ -39,10 +34,10 @@ def load_script():
             return status
 
     # The GET method
-    return render_template('load_script.html', form=form)
+    return render_template('index.html', form=form)
 
 
-@main.route('/view_script/<unique_key>')
+@main.route('/view_script/<unique_key>/')
 @main.route('/view_script/<unique_key>/secret/<secret_key>')
 def view_script(unique_key, secret_key = None):
     script_to_display = Script.query.filter_by(unique_key = unique_key).first()
@@ -92,7 +87,7 @@ def add_comment(line_key):
             line_unique_key = line_key,
             unique_key = "comment_" + secrets.token_urlsafe(25),
             line_number = line.line_number,
-            content_comment = request.values.get('new_comment')
+            content_comment = request.values.get('comment_contents')
         )
 
         db.session.add(new_comment)
@@ -101,11 +96,20 @@ def add_comment(line_key):
         return redirect(url_for('main.view_script', unique_key=line.script_unique_key()))
 
 
-@main.route('/edit_comment/<comment_key>/secret/<secret_key>')
+@main.route('/edit_comment/<comment_key>/secret/<secret_key>', methods=['GET', 'POST'])
 def edit_comment(comment_key, secret_key):
     comment_to_edit = Comment.query.filter_by(unique_key = comment_key).first()
 
+    if comment_to_edit.script_secret_key() != secret_key:
+        return "Invalid secret key"
 
+    if request.method == 'GET':
+        return render_template('edit_comment.html', new_comment=False, line=comment_to_edit.line_number, can_edit=True, contents=comment_to_edit.content_comment, comment_key = comment_key, secret_key=secret_key)
+
+    if request.method == 'POST':
+        comment_to_edit.content_comment = request.values.get('comment_contents')
+        db.session.commit()
+        return redirect(url_for('main.view_script', unique_key=comment_to_edit.script_unique_key(), secret_key=secret_key))
 
 @main.route('/view_comment/<comment_key>')
 def view_comment(comment_key):

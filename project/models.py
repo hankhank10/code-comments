@@ -25,6 +25,10 @@ class Line(db.Model):
         script = Script.query.filter_by(id = self.script_id).first()
         return script.unique_key
 
+    def script_secret_key(self):
+        script = Script.query.filter_by(id = self.script_id).first()
+        return script.secret_key
+
     def comment_count(self):
         comments_count = Comment.query.filter_by(line_unique_key = self.unique_key).count()
         return comments_count
@@ -40,7 +44,7 @@ class Line(db.Model):
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    script_id = db.Column(db.Integer)
+    script_id = db.Column(db.Integer)  #delete
     line_number = db.Column(db.Integer)
     line_unique_key = db.Column(db.String)
     unique_key = db.Column(db.String)
@@ -49,8 +53,13 @@ class Comment(db.Model):
     content_comment = db.Column(db.String)
     content_code = db.Column(db.String)
 
-    def secret_key(self):
-        script = Script.query.filter_by(id = self.script_id).first()
-        secret_key = script.secret_key
-        return secret_key
+    def script_unique_key(self):
+        line = Line.query.filter_by(unique_key = self.line_unique_key).first()
+        script_unique_key = line.script_unique_key()
+        return script_unique_key
+
+    def script_secret_key(self):
+        line = Line.query.filter_by(unique_key = self.line_unique_key).first()
+        script_secret_key = line.script_secret_key()
+        return script_secret_key
 

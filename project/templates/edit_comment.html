@@ -48,8 +48,14 @@
 </div>
 
 <div class="modal-body">
+    {% if new_comment == True %}
     <form action="{{ url_for('main.add_comment', line_key = line.unique_key) }}" method="post">
-    <textarea id="new_comment" name="new_comment"></textarea>
+    {% endif %}
+    {% if new_comment == False %}
+        <form action="{{ url_for('main.edit_comment', comment_key = comment_key, secret_key = secret_key) }}" method="post">
+    {% endif %}
+
+    <textarea id="comment_contents" name="comment_contents">{{contents}}</textarea>
 <br>
     <button type="submit" class="btn btn-primary" >Submit</button>
     <button type="button" class="btn btn-danger" data-dismiss="modal">Discard</button>
@@ -67,7 +73,7 @@
 </script>
 <script>
     new SimpleMDE({
-        element: document.getElementById("new_comment"),
+        element: document.getElementById("comment_contents"),
         placeholder: "Type comment here - markdown works...",
         status: false,
         toolbar: ["bold", "italic", "strikethrough", "code", "unordered-list", "link"],
