@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 class Script(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     unique_key = db.Column(db.String)
+    secret_key = db.Column(db.String)
     url = db.Column(db.String)
     source = db.Column(db.String)
     gituser = db.Column(db.String)
@@ -34,7 +35,7 @@ class Line(db.Model):
 
     def comment_unique_key(self):
         comment = Comment.query.filter_by(line_unique_key = self.unique_key).first()
-        return comment.unique_key()
+        return comment.unique_key
 
 
 class Comment(db.Model):
@@ -47,4 +48,9 @@ class Comment(db.Model):
     comment_type = db.Column(db.String)
     content_comment = db.Column(db.String)
     content_code = db.Column(db.String)
+
+    def secret_key(self):
+        script = Script.query.filter_by(id = self.script_id).first()
+        secret_key = script.secret_key
+        return secret_key
 
