@@ -9,6 +9,8 @@
 
     <title>Code Comments</title>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
 
     <!-- Google JS -->
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
@@ -43,11 +45,20 @@
     <!-- Strapdown viewer -->
     <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
 
+
+
 </head>
 
-<body>
-<div class="container">
+<body style="margin:0;">
+<!-- Navigation -->
+<nav class="navbar navbar-dark bg-dark fixed-top" >
+    <div class="container">
+        <a class="navbar-brand" href="{{url_for('main.load_script')}}">Code Comments</a>
+    </div>
+</nav>
 
+<div class="container">
+    <h1>&nbsp;</h1>
     <h1><a href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a> comments (aka <a href="{{url}}">{{script.unique_key}}</a>) </h1>
     <a class="lead">Original code: <a class="lead" href="https://github.com/{{script.gituser}}">{{script.gituser}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}">{{script.gitrepo}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/tree/{{script.gitbranch}}">{{script.gitbranch}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a></p>
     {% if edit_mode == True %}<p class="lead">You are currently <span data-toggle="tooltip" title="You can add and edit comments" data-placement="bottom" class="badge badge-warning">editing</span> these comments</p>{% endif %}
@@ -65,7 +76,7 @@
 
 <div class="col-2">
 
-<pre class="prettyaverage" style="text-align: right; margin-top: 0.1rem">{% for row in lines_to_display %}{% if row.has_comment() == False and edit_mode == True %}<a style="color: Gainsboro" href="{{url_for('main.add_comment', line_key=row.unique_key)}}" class='li-modal'><i class="fas fa-plus-circle"></i></a>{%endif%}{% if row.has_comment() == True %}<a href="{%if edit_mode==False%}{{url_for('main.view_comment', comment_key=row.comment_unique_key() )}}{%endif%}{%if edit_mode==True%}{{url_for('main.edit_comment', comment_key=row.comment_unique_key(), secret_key=secret_key)}}{%endif%}" class='li-modal' style="color: Red"><i class="fas fa-comment"></i><i class="fas fa-fw"></i></a>{%endif%}<br>{%endfor%}
+<pre class="prettyaverage" style="text-align: right; margin-top: 0.1rem">{% for row in lines_to_display %}{% if row.has_comment() == False and edit_mode == True %}<a style="color: Gainsboro" href="{{url_for('main.add_comment', line_key=row.unique_key, secret_key=secret_key)}}" class='li-modal'><i class="fas fa-plus-circle"></i></a>{%endif%}{% if row.has_comment() == True %}<a href="{%if edit_mode==False%}{{url_for('main.view_comment', comment_key=row.comment_unique_key() )}}{%endif%}{%if edit_mode==True%}{{url_for('main.edit_comment', comment_key=row.comment_unique_key(), secret_key=secret_key)}}{%endif%}" class='li-modal' style="color: Red"><i class="fas fa-comment"></i><i class="fas fa-fw"></i></a>{%endif%}<br>{%endfor%}
 </pre>
 </div>
 

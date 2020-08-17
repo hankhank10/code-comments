@@ -74,13 +74,13 @@ def view_script(unique_key, secret_key = None):
                            private_sharing_link=private_sharing_link)
 
 
-@main.route('/add_comment/<line_key>', methods=['GET', 'POST'])
-def add_comment(line_key):
+@main.route('/add_comment/<line_key>/secret/<secret_key>', methods=['GET', 'POST'])
+def add_comment(line_key, secret_key):
 
     line = Line.query.filter_by(unique_key=line_key).first()
 
     if request.method == 'GET':
-        return render_template('edit_comment.html', new_comment=True, line=line, can_edit=True, contents="")
+        return render_template('edit_comment.html', new_comment=True, line=line, can_edit=True, contents="", secret_key=secret_key)
 
     if request.method == 'POST':
         new_comment = Comment(
@@ -93,7 +93,7 @@ def add_comment(line_key):
         db.session.add(new_comment)
         db.session.commit()
 
-        return redirect(url_for('main.view_script', unique_key=line.script_unique_key()))
+        return redirect(url_for('main.view_script', unique_key=line.script_unique_key(), secret_key=secret_key))
 
 
 @main.route('/edit_comment/<comment_key>/secret/<secret_key>', methods=['GET', 'POST'])

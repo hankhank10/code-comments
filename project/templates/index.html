@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Landing Page - Start Bootstrap Theme</title>
+  <title>Code Comments</title>
 
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -48,8 +48,8 @@
             {{ form.hidden_tag() }}
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
+                {{ form.github_url(class_="form-control form-control-lg") }}
 
-                <input type="text" class="form-control form-control-lg" placeholder="https://github.com/pallets/flask/blob/master/setup.py">
               </div>
               <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-block btn-lg btn-primary">Comment</button>

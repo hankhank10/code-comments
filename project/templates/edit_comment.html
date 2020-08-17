@@ -37,7 +37,6 @@
 </head>
 <body>
 
-
 <div class="modal-header">
     {%if new_comment==True%}<h5 class="modal-title" id="exampleModalLabel">New comment line {{line.line_number}}</h5>{%endif%}
     {%if new_comment==False%}<h5 class="modal-title" id="exampleModalLabel">Edit comment line {{line.line_number}}</h5>{%endif%}
@@ -49,7 +48,7 @@
 
 <div class="modal-body">
     {% if new_comment == True %}
-    <form action="{{ url_for('main.add_comment', line_key = line.unique_key) }}" method="post">
+    <form action="{{ url_for('main.add_comment', line_key = line.unique_key, secret_key = secret_key) }}" method="post">
     {% endif %}
     {% if new_comment == False %}
         <form action="{{ url_for('main.edit_comment', comment_key = comment_key, secret_key = secret_key) }}" method="post">
