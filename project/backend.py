@@ -32,7 +32,11 @@ def download_script(url):
     stuffbefore, url_for_parsing = raw_url.split(".com/")
     source = "github"
     try:
-        gituser, gitrepo, gitbranch, filename = url_for_parsing.split("/")
+        split_output = url_for_parsing.split("/", 3)
+        gituser = split_output[0]
+        gitrepo = split_output[1]
+        gitbranch = split_output[2]
+        filename = split_output[3]
     except:
         return "Error: could not parse url. Please provide a full URL link from github to a script (not a repo)", None, None
 
