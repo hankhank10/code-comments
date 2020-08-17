@@ -3,9 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .models import Script, Line, Comment
 from . import db
 from . import app
-from random import random, randint, randrange
 import secrets
-import datetime
 import requests
 from coolname import generate_slug
 

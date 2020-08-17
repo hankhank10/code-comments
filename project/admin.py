@@ -11,4 +11,4 @@ class AdminView(ModelView):
 
 
     def is_accessible(self):
-        return True
+        return False

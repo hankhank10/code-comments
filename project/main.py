@@ -2,7 +2,6 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from .models import Script, Line, Comment
 from . import db
 from . import app
-from random import random, randint, randrange
 
 from project import backend
 
@@ -42,13 +41,9 @@ def load_script():
 def view_script(unique_key, secret_key = None):
     script_to_display = Script.query.filter_by(unique_key = unique_key).first()
 
-    print (secret_key)
-
     edit_mode = False
     if secret_key != None:
         if secret_key == script_to_display.secret_key: edit_mode = True
-
-    print (edit_mode)
 
     lines_to_display = Line.query.filter_by(script_id = script_to_display.id).all()
 
@@ -117,8 +112,6 @@ def view_comment(comment_key):
     comment_to_display = Comment.query.filter_by(unique_key = comment_key).first()
 
     output_content = comment_to_display.content_comment
-    print (output_content)
     output_content = markdown.markdown(output_content)
-    print (output_content)
 
     return render_template('view_comment.html', comment_to_display = comment_to_display, output_content = output_content)
