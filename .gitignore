@@ -1,3 +1,6 @@
 
 *.iml
 *.xml
+*.iml
+tests/.DS_Store
+project/__pycache__/__init__.cpython-38.pyc

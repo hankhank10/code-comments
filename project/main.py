@@ -128,3 +128,12 @@ def view_comment(comment_key):
     output_content = markdown.markdown(output_content)
 
     return render_template('view_comment.html', comment_to_display = comment_to_display, output_content = output_content)
+
+
+@main.route('/stats')
+def stats():
+    script_count = Script.query.count()
+    line_count = Line.query.count()
+    comment_count = Comment.query.count()
+
+    return "Scripts :" + script_count + "<br>Lines: " + line_count + "<br>Comments: " + comment_count
