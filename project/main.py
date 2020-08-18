@@ -10,6 +10,8 @@ from .forms import Load_Script
 import secrets
 import markdown
 
+
+
 main = Blueprint('main', __name__)
 
 
@@ -147,3 +149,4 @@ def stats():
     comment_count = Comment.query.count()
 
     return "Scripts :" + str(script_count) + "<br>Lines: " + str(line_count) + "<br>Comments: " + str(comment_count)
+

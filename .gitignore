@@ -1,2 +1,12 @@
 
 .DS_Store
+.idea/vcs.xml
+.idea/workspace.xml
+*.pyc
+*.ini
+migrations/env.py
+migrations/README
+migrations/script.py.mako
+migrations/versions/db7e48725896_.py
+project/db.sqlite
+project/mysecretstuff.py

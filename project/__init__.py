@@ -6,6 +6,17 @@ from flask_bootstrap import Bootstrap
 # init SQLAlchemy so we can use it later in our models
 db = SQLAlchemy()
 
+import sentry_sdk
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+from .mysecretstuff import sentry_dsn
+
+# Sentry stuff
+sentry_sdk.init(
+    dsn=sentry_dsn,
+    integrations=[FlaskIntegration()]
+)
+
 #def create_app():
 app = Flask(__name__)
 
