@@ -49,6 +49,8 @@ def load_script_manual():
 def view_script(unique_key, secret_key = None):
     script_to_display = Script.query.filter_by(unique_key = unique_key).first()
 
+    if script_to_display == None: return "Script not found"
+
     edit_mode = False
     if secret_key != None:
         if secret_key == script_to_display.secret_key: edit_mode = True
