@@ -11,6 +11,8 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <!-- Sweetalert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <!-- Google JS -->
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
@@ -45,12 +47,16 @@
     <!-- Strapdown viewer -->
     <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
 
+
+
     <!-- Mark CSS -->
     <link rel="stylesheet" type="text/css" href="/static/css/markcss.css">
+
 
 </head>
 
 <body style="margin:0;">
+
 <!-- Navigation -->
 <nav class="navbar navbar-dark bg-dark fixed-top" >
     <div class="container">
@@ -68,8 +74,8 @@
         or <a href="{{ url_for('main.load_script_manual', url = script.url) }}">create your own comment set</a></p>{% endif %}
 
     {% if edit_mode == True %}
-        <p>Public sharing link for this comment set: <a href="{{sharing_link}}">{{sharing_link}}</a><br>
-        <b>Private</b> link for this comment set, allowing editing: <a href="{{private_sharing_link}}">{{private_sharing_link}}</a></p>
+        <p>Public sharing link for this comment set: <input id="public_copy_input_box" class="customcopyform" style="color: lightskyblue;" value="{{sharing_link}}" readonly> <a href="#" onclick="copyPublic()" class="badge badge-primary" data-toggle="tooltip" title="Copy to clipboard" data-placement="right">copy</a><br>
+        <b>Private</b> link for this comment set, allowing editing: <input id="private_copy_input_box" class="customcopyform" style="color: lightcoral;" value="{{private_sharing_link}}" readonly> <a href="#" onclick="copyPrivate()" class="badge badge-danger" data-toggle="tooltip" title="Copy to clipboard" data-placement="bottom">copy</a> <a href="#emailremindermodal" data-toggle="modal" data-target="#emailremindermodal" class="badge badge-success" data-toggle="tooltip" title="Get a reminder of this private url sent to your email" data-placement="bottom">email reminder</a><br>
     {%endif%}
     <p class="lead">{{url}}</p>
 
@@ -109,6 +115,33 @@
     })
 </script>
 
+<script>
+    function copyPublic() {
+        /* Get the text field */
+        var copyText = document.getElementById("public_copy_input_box");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+        swal("Done!", "Public link copied to clipboard", "success");
+    }
+    function copyPrivate() {
+        /* Get the text field */
+        var copyText = document.getElementById("private_copy_input_box");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+        swal("Done!", "Private link copied to clipboard", "success");
+    }
+</script>
+
 
 <div class="modal left fade" id="new_comment_modal" tabindex="-1" role="dialog" aria-labelledby="new_comment_modal">
     <div class="modal-dialog modal-sm" role="document">
@@ -118,7 +151,24 @@
     </div>
 </div>
 
-<!-- Modal -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+
+{% for category, message in messages %}
+
+<script>
+    $(document).ready(function () {
+        swal("", "{{message}}", "{{category}}");
+    });
+</script>
+
+{% endfor %}
+
+{% endif %}
+{% endwith %}
+
+
+<!-- Secret key modal -->
 <div class="modal fade" id="secretkeymodal" tabindex="-1" role="dialog" aria-labelledby="secretkeymodal" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -145,6 +195,35 @@
     </div>
 </div>
 
+
+<!-- Secret key modal -->
+<div class="modal fade" id="emailremindermodal" tabindex="-1" role="dialog" aria-labelledby="emailremindermodal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{{url_for('main.email_reminder', unique_key = script.unique_key, secret_key = secret_key)}}" method="post">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Email reminder</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group">
+                    <label for="emailaddress">Enter your email address below to get a reminder of the secret key and editing url sent to you by email<br><br><i>We don't spam.<i></label>
+                    <input type="email" class="form-control" name="emailaddress" id="emailaddress" aria-describedby="emailaddress" placeholder="Email address" required>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" >Send</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 

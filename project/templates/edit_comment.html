@@ -66,7 +66,7 @@
         <form action="{{ url_for('main.edit_comment', comment_key = comment_key, secret_key = secret_key) }}" method="post">
     {% endif %}
 
-    <textarea id="comment_contents" name="comment_contents" autofocus>Test 2</textarea>
+    <textarea id="comment_contents" name="comment_contents" autofocus>{{contents}}</textarea>
 <br>
     <button type="submit" class="btn btn-primary" >Submit</button>
     <button type="button" class="btn btn-danger" data-dismiss="modal">Discard</button>

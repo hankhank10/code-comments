@@ -73,24 +73,39 @@ def view_script(unique_key, secret_key = None):
                            private_sharing_link=script_to_display.secret_link())
 
 
-@main.route('/view_script/<unique_key>/secret/<secret_key>/email_reminder')
+@main.route('/view_script/<unique_key>/secret/<secret_key>/email_reminder', methods=['POST'])
 def email_reminder(unique_key, secret_key):
     script = Script.query.filter_by(unique_key = unique_key).first()
 
+    error_has_occurred = False
     # Verify they know the secret
-    if secret_key != None: return "No secret key provided"
-    if secret_key == script.secret_key: return "Not authorised"
+    if secret_key == None:
+        flash ("No secret key provided", "error")
+        error_has_occurred = True
 
-    email_address_provided = request.values.get('comment_contents')
-    if email_address_provided == None: return "No email address provided"
+    if secret_key != script.secret_key:
+        flash ("Not authorised", "error")
+        error_has_occurred = True
 
-    email_body = "You asked to be reminded by email that you have provided comments on " + script.unique_key + " and that your secret key is " + script.secret_key + "<br><br>You can access the private link at " + script.secret_link()
-    mailman.send_email("coder@codecomments.dev", email_address_provided, "Codecomments.dev Your secret key for " + script.unique_key, "You asked to be reminded by email that you have provided comments on " + script.unique_key + " and that your ")
+    email_address_provided = request.values.get('emailaddress')
+    if email_address_provided == None or email_address_provided == "":
+        flash ("No email address provided", "error")
+        error_has_occurred = True
 
-    script.associated_email = email_address_provided
-    db.session.commit()
+    if error_has_occurred == False:
+        email_body = "You asked to be reminded by email that you have provided comments on the script at " + script.url + ".\r\n\r\nYour comment set is known as " + script.unique_key + " and your secret key is " + script.secret_key + "\r\n\r\nThe public url of this comment set for sharing is " + script.sharing_link() + "\r\n\r\nYou can access the private link at " + script.secret_link()
+        try:
+            mailman.send_email("codecomments@codecomments.dev", email_address_provided, "codecomments.dev: your secret key for " + script.unique_key, email_body)
+        except:
+            flash ("Error sending email", "error")
+            error_has_occurred = True
 
-    return (url_for('view_script', unique_key=unique_key, secret_key=secret_key))
+        if error_has_occurred == False:
+            flash ('Email reminder sent', 'success')
+            script.associated_email = email_address_provided
+            db.session.commit()
+
+    return redirect(url_for('main.view_script', unique_key=unique_key, secret_key=secret_key))
 
 
 @main.route('/add_comment/<line_key>/secret/<secret_key>', methods=['GET', 'POST'])
@@ -150,3 +165,8 @@ def stats():
 
     return "Scripts :" + str(script_count) + "<br>Lines: " + str(line_count) + "<br>Comments: " + str(comment_count)
 
+
+@main.route('/flashtest')
+def flashtest():
+    flash ("This is a test from python!", "error")
+    return redirect(url_for('main.view_script', unique_key="radiant-cockle", secret_key="district"))

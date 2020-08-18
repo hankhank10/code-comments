@@ -1,2 +1,16 @@
 .modal-backdrop {background: none;}
 .modal{background: none;}
+
+.customcopyform {
+    width: 300px;
+    border-top-style: none;
+    border-right-style: none;
+    border-left-style: none;
+    border-bottom-style: none;
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    padding: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

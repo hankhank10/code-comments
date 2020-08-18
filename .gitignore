@@ -10,3 +10,8 @@ migrations/script.py.mako
 migrations/versions/db7e48725896_.py
 project/db.sqlite
 project/mysecretstuff.py
+project/.idea/jsLibraryMappings.xml
+project/.idea/modules.xml
+project/.idea/project.iml
+project/.idea/vcs.xml
+project/.idea/workspace.xml
