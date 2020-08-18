@@ -3,7 +3,7 @@ from .models import Script, Line, Comment
 from . import db
 from . import app
 
-from project import backend
+from project import backend, mailman
 
 from .forms import Load_Script
 
@@ -61,20 +61,34 @@ def view_script(unique_key, secret_key = None):
             comment = Comment.query.filter_by(line_unique_key = line.unique_key).first()
             comments_to_display.append (comment.unique_key)
 
-    sharing_link = "https://codecomments.dev/view_script/" + unique_key  #use for deployment
-    #sharing_link = "http://0.0.0.0:1234/view_script/"+unique_key   #use for local testing
-
-    if secret_key == None: private_sharing_link = sharing_link
-    if secret_key != None: private_sharing_link = sharing_link + "/secret/" + secret_key
-
     return render_template('show_script.html',
                            script=script_to_display,
                            lines_to_display=lines_to_display,
                            comments_to_display=comments_to_display,
                            edit_mode=edit_mode,
                            secret_key=secret_key,
-                           sharing_link=sharing_link,
-                           private_sharing_link=private_sharing_link)
+                           sharing_link=script_to_display.sharing_link(),
+                           private_sharing_link=script_to_display.private_link())
+
+
+@main.route('/view_script/<unique_key>/secret/<secret_key>/email_reminder')
+def email_reminder(unique_key, secret_key):
+    script = Script.query.filter_by(unique_key = unique_key).first()
+
+    # Verify they know the secret
+    if secret_key != None: return "No secret key provided"
+    if secret_key == script.secret_key: return "Not authorised"
+
+    email_address_provided = request.values.get('comment_contents')
+    if email_address_provided == None: return "No email address provided"
+
+    email_body = "You asked to be reminded by email that you have provided comments on " + script.unique_key + " and that your secret key is " + script.secret_key + "<br><br>You can access the private link at " + script.secret_link()
+    mailman.send_email("coder@codecomments.dev", email_address_provided, "Codecomments.dev Your secret key for " + script.unique_key, "You asked to be reminded by email that you have provided comments on " + script.unique_key + " and that your ")
+
+    script.associated_email = email_address_provided
+    db.session.commit()
+
+    return (url_for('view_script', unique_key=unique_key, secret_key=secret_key))
 
 
 @main.route('/add_comment/<line_key>/secret/<secret_key>', methods=['GET', 'POST'])

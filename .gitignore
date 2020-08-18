@@ -13,3 +13,8 @@ project/__pycache__/__init__.cpython-38.pyc
 project/__pycache__/admin.cpython-38.pyc
 project/__pycache__/backend.cpython-38.pyc
 project/__pycache__/main.cpython-38.pyc
+project/mysecretstuff.py
+project/db.sqlite
+/project/templates/old/
+.idea/modules.xml
+project/mysecretstuff.py
