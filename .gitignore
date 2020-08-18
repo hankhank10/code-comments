@@ -18,3 +18,11 @@ project/db.sqlite
 /project/templates/old/
 .idea/modules.xml
 project/mysecretstuff.py
+project/__pycache__/__init__.cpython-38.pyc
+project/__pycache__/admin.cpython-38.pyc
+project/__pycache__/backend.cpython-38.pyc
+project/__pycache__/mailman.cpython-38.pyc
+project/__pycache__/main.cpython-38.pyc
+project/__pycache__/models.cpython-38.pyc
+.idea/modules.xml
+.idea/vcs.xml
