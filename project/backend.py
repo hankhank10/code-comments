@@ -24,7 +24,7 @@ def download_script(url):
     if "github.com" in url: url_type = "pretty"
     if "raw.githubusercontent.com" in url: url_type = "raw"
 
-    if url_type == "unknown": return "Error: unrecognised github url", None, None
+    if url_type == "unknown": return "That github url was not recognised", None, None
     if url_type == "pretty": raw_url = get_raw_url(url)
     if url_type == "raw": raw_url = url
 
@@ -38,16 +38,16 @@ def download_script(url):
         gitbranch = split_output[2]
         filename = split_output[3]
     except:
-        return "Error: could not parse url. Please provide a full URL link from github to a script (not a repo)", None, None
+        return "Could not parse that github url. Please provide a full URL link from github to a file (not a repo)", None, None
 
     # Download the file from github
     try:
         r = requests.get(raw_url)
     except:
-        return "Error: error generated when trying to download file", None, None
+        return "An error occurred when trying to download that file - check the url maybe?", None, None
 
     if r.status_code != 200:
-        return "Error: server returned invalud status code", None, None
+        return "The github server returned invalid status code when trying to download the file", None, None
 
     # Create new script record
     unique_name = False

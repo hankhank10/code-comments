@@ -1,4 +1,5 @@
 from . import db
+from sqlalchemy.ext import hybrid
 
 
 class Script(db.Model):

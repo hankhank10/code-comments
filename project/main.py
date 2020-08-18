@@ -3,7 +3,7 @@ from .models import Script, Line, Comment
 from . import db
 from . import app
 
-from project import backend, mailman
+from project import backend, mailman, mysecretstuff
 
 from .forms import Load_Script
 
@@ -42,7 +42,7 @@ def load_script_manual():
     if status == "success":
         return redirect(url_for('main.view_script', unique_key=script_unique_key, secret_key=secret_key))
     if status != "success":
-        flash(status, "error")
+        flash (status, "error")
         return redirect(url_for('main.index'))
 
 
@@ -176,3 +176,33 @@ def stats():
 def flashtest():
     flash ("This is a test from python!", "error")
     return redirect(url_for('main.view_script', unique_key="radiant-cockle", secret_key="district"))
+
+
+@main.route('/happybirthday'+ mysecretstuff.secret_tutorial_url)
+def happy_birthday():
+    url = "https://github.com/hankhank10/happy-birthday/blob/master/happybirthday.py"
+    unique_key_to_create = "uncovered-ammonite"
+    secret_key_to_create = mysecretstuff.happy_birthday_secret_key
+
+    script_already_there = Script.query.filter_by(unique_key=unique_key_to_create).first()
+    if script_already_there != None:
+        print ("Found a script already there so deleting")
+        lines_already_there = Line.query.filter_by(script_id = script_already_there.id)
+
+        for line in lines_already_there:
+            db.session.delete(line)
+
+        db.session.delete(script_already_there)
+        db.session.commit()
+
+    status, script_unique_key, secret_key = backend.download_script(url)
+
+    if status != "success": return "Error downloading script"
+
+    script = Script.query.filter_by(unique_key = script_unique_key).first()
+    script.unique_key = unique_key_to_create
+    script.secret_key = secret_key_to_create
+    db.session.commit()
+
+    return redirect(url_for('main.view_script', unique_key = unique_key_to_create, secret_key = secret_key_to_create))
+

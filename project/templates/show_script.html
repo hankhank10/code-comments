@@ -47,12 +47,11 @@
     <!-- Strapdown viewer -->
     <script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
 
-
-
     <!-- Mark CSS -->
     <link rel="stylesheet" type="text/css" href="/static/css/markcss.css">
 
 
+    <script async src="//genius.codes"></script>
 </head>
 
 <body style="margin:0;">
@@ -196,6 +195,7 @@
 </div>
 
 
+{% if edit_mode == True %}
 <!-- Secret key modal -->
 <div class="modal fade" id="emailremindermodal" tabindex="-1" role="dialog" aria-labelledby="emailremindermodal" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -224,6 +224,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 </body>
 
