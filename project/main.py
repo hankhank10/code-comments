@@ -70,7 +70,7 @@ def view_script(unique_key, secret_key = None):
                            edit_mode=edit_mode,
                            secret_key=secret_key,
                            sharing_link=script_to_display.sharing_link(),
-                           private_sharing_link=script_to_display.private_link())
+                           private_sharing_link=script_to_display.secret_link())
 
 
 @main.route('/view_script/<unique_key>/secret/<secret_key>/email_reminder')

@@ -11,11 +11,11 @@ from sentry_sdk.integrations.flask import FlaskIntegration
 
 from .mysecretstuff import sentry_dsn
 
-# Sentry stuff
-sentry_sdk.init(
-    dsn=sentry_dsn,
-    integrations=[FlaskIntegration()]
-)
+# Sentry debug stuff - only for use in production
+#sentry_sdk.init(
+#    dsn=sentry_dsn,
+#    integrations=[FlaskIntegration()]
+#)
 
 #def create_app():
 app = Flask(__name__)
