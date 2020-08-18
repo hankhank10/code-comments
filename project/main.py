@@ -27,7 +27,8 @@ def index():
         if status == "success":
             return redirect(url_for('main.view_script', unique_key=script_unique_key, secret_key=secret_key))
         if status != "success":
-            return status
+            flash (status, "error")
+            return redirect(url_for('main.index'))
 
     # The GET method
     return render_template('index.html', form=form)
@@ -41,7 +42,8 @@ def load_script_manual():
     if status == "success":
         return redirect(url_for('main.view_script', unique_key=script_unique_key, secret_key=secret_key))
     if status != "success":
-        return status
+        flash(status, "error")
+        return redirect(url_for('main.index'))
 
 
 @main.route('/view_script/<unique_key>/')
@@ -49,7 +51,9 @@ def load_script_manual():
 def view_script(unique_key, secret_key = None):
     script_to_display = Script.query.filter_by(unique_key = unique_key).first()
 
-    if script_to_display == None: return "Script not found"
+    if script_to_display == None:
+        flash ("Comment set not found", "error")
+        return redirect(url_for('main.index'))
 
     edit_mode = False
     if secret_key != None:

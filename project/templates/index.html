@@ -13,6 +13,9 @@
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+  <!-- Sweetalert -->
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
   <!-- Custom fonts for this template -->
   <script src="https://kit.fontawesome.com/99043d701d.js" crossorigin="anonymous"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.5.5/css/simple-line-icons.css" rel="stylesheet" type="text/css">
@@ -121,6 +124,22 @@
       </div>
     </div>
   </footer>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+
+  {% for category, message in messages %}
+
+  <script>
+    $(document).ready(function () {
+      swal("", "{{message}}", "{{category}}");
+    });
+  </script>
+
+  {% endfor %}
+
+  {% endif %}
+  {% endwith %}
 
   <!-- Bootstrap core JavaScript -->
   <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
