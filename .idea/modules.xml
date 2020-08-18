@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/code-comments.iml" filepath="$PROJECT_DIR$/.idea/code-comments.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../flask-aperitif/.idea/flask-aperitif.iml" filepath="$PROJECT_DIR$/../flask-aperitif/.idea/flask-aperitif.iml" />
-    </modules>
-  </component>
-</project>
