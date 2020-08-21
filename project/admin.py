@@ -9,6 +9,5 @@ class AdminView(ModelView):
         super().__init__(*args, **kwargs)
         self.static_folder = 'static'
 
-
     def is_accessible(self):
         return False

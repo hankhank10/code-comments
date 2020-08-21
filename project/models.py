@@ -1,5 +1,4 @@
 from . import db
-from sqlalchemy.ext import hybrid
 from project import mysecretstuff
 
 
