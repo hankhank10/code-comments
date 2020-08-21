@@ -16,7 +16,7 @@ class Script(db.Model):
     timestamp = db.Column(db.DateTime)
 
     def sharing_link(self):
-        sharing_link = mysecretstuff.website_url + "/view_script/" + self.unique_key  # use for deployment
+        sharing_link = mysecretstuff.website_url + "/script/view/" + self.unique_key  # use for deployment
         return sharing_link
 
     def secret_link(self):

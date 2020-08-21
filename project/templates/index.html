@@ -73,10 +73,7 @@
       </div>
     </div>
   </header>
-
-  <div class="alert alert-warning" role="alert">
-    codecomments has recently updated to a new architecture which required a database reset - if you are looking for previous comments you can find them at <a href="https://old.codecomments.dev/ class="alert-link">https://old.codecomments.dev/</a>
-  </div>
+  
 
   <!-- Icons Grid -->
   <section class="features-icons bg-light text-center">
@@ -123,10 +120,10 @@
           <h2 class="mb-4">Written comments before but forgot your secret link?</h2>
         </div>
         <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
-          <form action="{{ url_for(email_reminder_of_login_key) }}">
+          <form action="{{ url_for('main.email_reminder_of_login_key') }}" method="GET">
             <div class="form-row">
               <div class="col-12 col-md-9 mb-2 mb-md-0">
-                <input type="email" class="form-control form-control-lg" name="email_addres" id="email_address" placeholder="Enter your email...">
+                <input type="email" class="form-control form-control-lg" name="email_address" id="email_address" placeholder="Enter your email...">
               </div>
               <div class="col-12 col-md-3">
                 <button type="submit" class="btn btn-block btn-lg btn-primary">Reminder</button>

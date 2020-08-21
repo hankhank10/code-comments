@@ -19,3 +19,5 @@ project/.idea/workspace.xml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/modules.xml
 .idea/misc.xml
+migrations/versions/2a303f04949f_.py
+migrations/versions/47baa8972382_.py

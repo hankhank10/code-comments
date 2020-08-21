@@ -44,8 +44,8 @@ def load_script_manual():
         return redirect(url_for('main.index'))
 
 
-@main.route('/script/load/<unique_key>/')
-@main.route('/script/load/<unique_key>/secret/<secret_key>')
+@main.route('/script/view/<unique_key>/')
+@main.route('/script/view/<unique_key>/secret/<secret_key>')
 def view_script(unique_key, secret_key=None):
     script_to_display = Script.query.filter_by(unique_key=unique_key).first()
 
@@ -111,7 +111,7 @@ def email_reminder(unique_key, secret_key):
             if existing_user_count == 0:
                 new_user = User(
                     email_address=email_address_provided,
-                    login_key="userkey_" + secrets.token_urlsafe(10),
+                    login_key=secrets.token_urlsafe(15),
                 )
                 db.session.add(new_user)
 
@@ -185,7 +185,11 @@ def email_reminder_of_login_key():
         flash("No email address provided", "error")
         return redirect(url_for('main.index'))
 
-    user = User.query.filter_by(email_address=email_address).first_or_404()
+    user = User.query.filter_by(email_address=email_address).first()
+
+    if user is None:
+        flash("Email address not found - have you previously provided comments?", "error")
+        return redirect(url_for('main.index'))
 
     # update the user key
     new_user_key = "userkey_" + secrets.token_urlsafe(10)
@@ -193,7 +197,7 @@ def email_reminder_of_login_key():
     db.session.commit()
 
     # send the email
-    email_body = "You asked for a link to access your comments on codecomments.dev. Here it is:\r\n\r\n http://0.0.0.0:1234/user/view/" + email_address + "/secret/" + new_user_key
+    email_body = "You asked for a link to access your comments on codecomments.dev. Here it is:\r\n\r\n " + mysecretstuff.website_url + "/user/view/" + email_address + "/secret/" + new_user_key
     try:
         mailman.send_email("codecomments@codecomments.dev", email_address,
                            "codecomments.dev: your user login link", email_body)

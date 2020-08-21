@@ -29,6 +29,7 @@ bootstrap = Bootstrap(app)
 from .models import Script
 from .models import Line
 from .models import Comment
+from .models import User
 
 db.init_app(app)
 migrate = Migrate(app, db)
