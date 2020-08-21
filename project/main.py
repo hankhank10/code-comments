@@ -49,7 +49,7 @@ def load_script_manual():
 def view_script(unique_key, secret_key=None):
     script_to_display = Script.query.filter_by(unique_key=unique_key).first()
 
-    if script_to_display == None:
+    if script_to_display is None:
         flash("Comment set not found", "error")
         return redirect(url_for('main.index'))
 
@@ -175,7 +175,7 @@ def view_comment(comment_key):
 
 
 @main.route('/user/view/<email_address>/reminder')
-def email_reminder_of_login_key (email_address):
+def email_reminder_of_login_key(email_address):
 
     user = User.query.filter_by(email_address=email_address).first_or_404()
 
@@ -204,7 +204,7 @@ def email_reminder_of_login_key (email_address):
 def view_user(email_address, secret_key):
 
     if email_address is None or secret_key is None:
-        flash ("No credentials provider", "error")
+        flash("No credentials provider", "error")
         return redirect(url_for('main.index'))
 
     user = User.query.filter_by(email_address=email_address).first_or_404()

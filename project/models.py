@@ -32,15 +32,15 @@ class Line(db.Model):
     content = db.Column(db.String)
 
     def script_unique_key(self):
-        script = Script.query.filter_by(id = self.script_id).first()
+        script = Script.query.filter_by(id=self.script_id).first()
         return script.unique_key
 
     def script_secret_key(self):
-        script = Script.query.filter_by(id = self.script_id).first()
+        script = Script.query.filter_by(id=self.script_id).first()
         return script.secret_key
 
     def comment_count(self):
-        comments_count = Comment.query.filter_by(line_unique_key = self.unique_key).count()
+        comments_count = Comment.query.filter_by(line_unique_key=self.unique_key).count()
         return comments_count
 
     def has_comment(self):
@@ -48,13 +48,13 @@ class Line(db.Model):
         if self.comment_count() > 0: return True
 
     def comment_unique_key(self):
-        comment = Comment.query.filter_by(line_unique_key = self.unique_key).first()
+        comment = Comment.query.filter_by(line_unique_key=self.unique_key).first()
         return comment.unique_key
 
 
 class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    script_id = db.Column(db.Integer)  #delete
+    script_id = db.Column(db.Integer)  # delete
     line_number = db.Column(db.Integer)
     line_unique_key = db.Column(db.String)
     unique_key = db.Column(db.String)
@@ -64,12 +64,12 @@ class Comment(db.Model):
     content_code = db.Column(db.String)
 
     def script_unique_key(self):
-        line = Line.query.filter_by(unique_key = self.line_unique_key).first()
+        line = Line.query.filter_by(unique_key=self.line_unique_key).first()
         script_unique_key = line.script_unique_key()
         return script_unique_key
 
     def script_secret_key(self):
-        line = Line.query.filter_by(unique_key = self.line_unique_key).first()
+        line = Line.query.filter_by(unique_key=self.line_unique_key).first()
         script_secret_key = line.script_secret_key()
         return script_secret_key
 
