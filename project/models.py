@@ -1,5 +1,6 @@
 from . import db
 from sqlalchemy.ext import hybrid
+import mysecretstuff
 
 
 class Script(db.Model):
@@ -15,8 +16,7 @@ class Script(db.Model):
     associated_email = db.Column(db.String)
 
     def sharing_link(self):
-        sharing_link = "https://codecomments.dev/view_script/" + self.unique_key  # use for deployment
-        # sharing_link = "http://0.0.0.0:1234/view_script/"+ self.unique_key   #use for local testing
+        sharing_link = mysecretstuff.website_url + "/view_script/" + self.unique_key  # use for deployment
         return sharing_link
 
     def secret_link(self):
