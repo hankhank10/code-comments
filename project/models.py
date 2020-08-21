@@ -13,15 +13,15 @@ class Script(db.Model):
     gitbranch = db.Column(db.String)
     filename = db.Column(db.String)
     associated_email = db.Column(db.String)
+    timestamp = db.Column(db.DateTime)
 
     def sharing_link(self):
-        sharing_link = "https://codecomments.dev/view_script/" + self.unique_key  # use for deployment
-        # sharing_link = "http://0.0.0.0:1234/view_script/"+ self.unique_key   #use for local testing
+        #sharing_link = "https://codecomments.dev/script/view/" + self.unique_key  # use for deployment
+        sharing_link = "http://0.0.0.0:1234/script/view/"+ self.unique_key   #use for local testing
         return sharing_link
 
     def secret_link(self):
         return self.sharing_link() + "/secret/" + self.secret_key
-
 
 
 class Line(db.Model):
@@ -74,7 +74,7 @@ class Comment(db.Model):
         return script_secret_key
 
 
-class Users(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email_address = db.Column(db.String)
     login_key = db.Column(db.String)

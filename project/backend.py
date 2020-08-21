@@ -6,6 +6,7 @@ from . import app
 import secrets
 import requests
 from coolname import generate_slug
+from datetime import datetime
 
 from random_words import RandomWords
 rw = RandomWords()
@@ -66,7 +67,8 @@ def download_script(url):
         gituser=gituser,
         gitrepo=gitrepo,
         gitbranch=gitbranch,
-        filename=filename
+        filename=filename,
+        timestamp=datetime.utcnow()
     )
 
     # add the new script to the database

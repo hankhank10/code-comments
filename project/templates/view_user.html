@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>View user</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+
+    <!-- Datatables  -->
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/dataTables.bootstrap4.min.css">
+
+</head>
+<body style="margin:0;">
+
+<script>
+    $(document).ready(function() {
+        $('#usertable').DataTable();
+    } );
+</script>
+
+<nav class="navbar navbar-dark bg-dark fixed-top" >
+    <div class="container">
+        <a class="navbar-brand" href="{{url_for('main.index')}}">Code Comments for {{user.email_address}}</a>
+    </div>
+</nav>
+
+<div class="container">
+
+<h1>&nbsp;</h1>
+<h1>&nbsp;</h1>
+
+
+    <table id="usertable" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Github user</th>
+                <th>Github repo</th>
+                <th>Filename</th>
+                <th>Comment set public key</th>
+                <th>Comment set private key</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for script in scripts %}
+            <tr>
+                <td>{{ script.timestamp.strftime('%d-%b %H:%M') }}</td>
+                <td>{{ script.gituser }}</td>
+                <td>{{ script.gitrepo }}</td>
+                <td>{{ script.filename}}</td>
+                <td><a href="{{ script.sharing_link() }}">{{ script.unique_key }}</a></td>
+                <td><a href="{{ script.secret_link() }}">{{ script.secret_key }}</a></td>
+            </tr>
+        {% endfor %}
+        </tfoot>
+    </table>
+
+</div>
+
+</body>
+</html>
