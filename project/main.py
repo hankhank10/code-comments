@@ -174,8 +174,16 @@ def view_comment(comment_key):
     return render_template('view_comment.html', comment_to_display=comment_to_display, output_content=output_content)
 
 
-@main.route('/user/view/<email_address>/reminder')
-def email_reminder_of_login_key(email_address):
+@main.route('/user/reminder')
+def email_reminder_of_login_key():
+
+    email_address = request.args.get('email_address')
+
+    error_has_occurred = False
+
+    if email_address is None:
+        flash("No email address provided", "error")
+        return redirect(url_for('main.index'))
 
     user = User.query.filter_by(email_address=email_address).first_or_404()
 
@@ -185,7 +193,6 @@ def email_reminder_of_login_key(email_address):
     db.session.commit()
 
     # send the email
-    error_has_occurred = False
     email_body = "You asked for a link to access your comments on codecomments.dev. Here it is:\r\n\r\n http://0.0.0.0:1234/user/view/" + email_address + "/secret/" + new_user_key
     try:
         mailman.send_email("codecomments@codecomments.dev", email_address,
