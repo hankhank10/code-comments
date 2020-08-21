@@ -1,6 +1,6 @@
 from . import db
 from sqlalchemy.ext import hybrid
-import mysecretstuff
+from project import mysecretstuff
 
 
 class Script(db.Model):
