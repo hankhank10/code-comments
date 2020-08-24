@@ -20,6 +20,9 @@ def get_raw_url(url_source, pretty_url):
     if url_source == "pastebin":
         raw_url = pretty_url.replace("pastebin.com/", "pastebin.com/raw/")
 
+    if url_source == "hastebin":
+        raw_url = pretty_url.replace("hastebin.com/", "hastebin.com/raw/")
+
     return raw_url
 
 
@@ -29,6 +32,7 @@ def download_script(url):
     url_source = "unknown"
     if "github" in url: url_source = "github"
     if "pastebin.com" in url: url_source = "pastebin"
+    if "hastebin.com" in url: url_source = "hastebin"
     if url_source == "unknown":
         return "The source could not be identified"
 
@@ -70,6 +74,24 @@ def download_script(url):
         gitrepo = ""
         gitbranch = ""
         filename = raw_url[-8:]
+
+    if url_source == "hastebin":
+        # Strip off any .pl
+        url = url.replace(".pl", "")
+
+        # Check if it's a raw URL or a pretty URL
+        url_type = "pretty"
+        if "hastebin.com/raw/" in url: url_type = "raw"
+
+        if url_type == "pretty": raw_url = get_raw_url("hastebin", url)
+        if url_type == "raw": raw_url = url
+
+        # Parse the url into the relevant bits
+        source = url_source
+        gituser = ""
+        gitrepo = ""
+        gitbranch = ""
+        filename = raw_url[-10:]
 
     # Download the file
     try:
@@ -121,3 +143,51 @@ def download_script(url):
         line_number = line_number + 1
 
     return "success", script_unique_key, secret_key
+
+
+def duplicate_script(unique_key):
+    script_to_duplicate = Script.query.filter_by(unique_key=unique_key).first()
+    lines_to_duplicate = Line.query.filter_by(script_id=script_to_duplicate.id).order_by(Line.line_number).all()
+
+    # Create new script record
+    unique_name = False
+    while unique_name is False:
+        script_unique_key = generate_slug(2)
+        other_scripts_with_that_name = Script.query.filter_by(unique_key = script_unique_key).count()
+        if other_scripts_with_that_name == 0: unique_name = True
+
+    secret_key = rw.random_word()
+
+    new_script = Script(
+        source=script_to_duplicate.source,
+        unique_key=script_unique_key,
+        secret_key=secret_key,
+        url=script_to_duplicate.url,
+        gituser=script_to_duplicate.gituser,
+        gitrepo=script_to_duplicate.gitrepo,
+        gitbranch=script_to_duplicate.gitbranch,
+        filename=script_to_duplicate.filename,
+        timestamp=datetime.utcnow()
+    )
+
+    # add the new script to the database
+    db.session.add(new_script)
+    db.session.commit()
+
+    # recall the newly created script so we can get the id
+    script = Script.query.filter_by(unique_key=script_unique_key).first_or_404()
+
+    for line in lines_to_duplicate:
+        new_line = Line(
+            script_id=script.id,
+            line_number=line.line_number,
+            unique_key="line_" + secrets.token_urlsafe(30),
+            content=line.content
+        )
+        db.session.add(new_line)
+        db.session.commit()
+
+    return "success", script_unique_key, secret_key
+
+
+

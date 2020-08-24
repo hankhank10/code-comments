@@ -46,7 +46,7 @@
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <h1 class="mb-5">Enter a github file url<br>to provide your comments</h1>
+          <h1 class="mb-5">Enter a file url below<br>to provide your comments</h1>
 
 
 
@@ -64,14 +64,20 @@
               </div>
 
             </div>
+
           </form>
         </div>
+        <div class="col-xl-9 mx-auto"><br>
+          <h6 class="mb-5">Supports: github, pastebin, hastebin</h6>
+        </div>
+
         <div class="col-xl-9 mx-auto">
           {% for error in form.github_url.errors %}
           <h1 class="mb-5">{{ error }}</h1>
           {% endfor %}
         </div>
       </div>
+
     </div>
   </header>
 

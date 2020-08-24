@@ -77,6 +77,16 @@ def view_script(unique_key, secret_key=None):
                            private_sharing_link=script_to_display.secret_link())
 
 
+@main.route('/script/duplicate/<unique_key>/')
+def duplicate_script(unique_key):
+    status, script_unique_key, secret_key = backend.duplicate_script(unique_key)
+    if status == "success":
+        return redirect(url_for('main.view_script', unique_key=script_unique_key, secret_key=secret_key))
+    if status != "success":
+        flash(status, "Error duplicating script")
+        return redirect(url_for('main.index'))
+
+
 @main.route('/script/view/<unique_key>/secret/<secret_key>/email_reminder', methods=['POST'])
 def email_reminder(unique_key, secret_key):
     script = Script.query.filter_by(unique_key=unique_key).first()

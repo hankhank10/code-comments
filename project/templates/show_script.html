@@ -62,7 +62,7 @@
 
     <h1>
         {% if script.source == "github" %}<a href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a>{% endif %}
-        {% if script.source == "pastebin" %}<h1><a href="https://pastebin.com/{{ script.filename }}">{{ script.filename }}</a>{% endif %}
+        {% if script.source == "pastebin" or script.source == "hastebin" %}<h1><a href="https://pastebin.com/{{ script.filename }}">{{ script.filename }}</a>{% endif %}
         comments (aka <a href="{{url}}">{{script.unique_key}}</a>)
     </h1>
 
@@ -70,14 +70,14 @@
         <a class="lead">Original code: <a class="lead" href="https://github.com/{{script.gituser}}">{{script.gituser}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}">{{script.gitrepo}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/tree/{{script.gitbranch}}">{{script.gitbranch}}</a> / <a class="lead" href="https://github.com/{{script.gituser}}/{{script.gitrepo}}/blob/{{script.gitbranch}}/{{script.filename}}">{{script.filename}}</a></p>
     {% endif %}
 
-    {% if script.source == "pastebin" %}
-        <span class="lead">Original code: pastebin / <a href="https://pastebin.com/{{ script.filename }}">{{ script.filename }}</a></span>
+    {% if script.source == "pastebin" or script.source == "hastebin" %}
+        <span class="lead">Original code: {{ script.source }} / <a href="https://pastebin.com/{{ script.filename }}">{{ script.filename }}</a></span>
     {% endif %}
 
     {% if edit_mode == True %}<p class="lead">You are currently <span data-toggle="tooltip" title="You can add and edit comments" data-placement="bottom" class="badge badge-warning">editing</span> these comments</p>{% endif %}
 
     {% if edit_mode == False %}<p class="lead">You are currently <span data-toggle="tooltip" title="If you are the owner of this comment set then click here to enter your secret key" data-placement="bottom" class="badge badge-success">viewing</span> these comments - <a href="#secretkeymodal" data-toggle="modal" data-target="#secretkeymodal">edit if you are the owner</a>
-        or <a href="{{ url_for('main.load_script_manual', url = script.url) }}">create your own comment set</a></p>{% endif %}
+        or <a href="{{ url_for('main.duplicate_script', unique_key = script.unique_key) }}">create your own comment set</a></p>{% endif %}
 
     {% if edit_mode == True %}
         <p>Public sharing link for this comment set: <input id="public_copy_input_box" class="customcopyform" style="color: lightskyblue;" value="{{sharing_link}}" readonly> <a href="#" onclick="copyPublic()" class="badge badge-primary" data-toggle="tooltip" title="Copy to clipboard" data-placement="right">copy</a><br>
