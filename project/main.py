@@ -19,7 +19,7 @@ def index():
 
     # The POST method
     if form.validate_on_submit():
-        url = backend.get_raw_url(form.github_url.data)
+        url = form.github_url.data
 
         status, script_unique_key, secret_key = backend.download_script(url)
         if status == "success":

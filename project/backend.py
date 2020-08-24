@@ -12,43 +12,73 @@ from random_words import RandomWords
 rw = RandomWords()
 
 
-def get_raw_url(pretty_url):
-    raw_url = pretty_url.replace("github.com", "raw.githubusercontent.com")
-    raw_url = raw_url.replace("blob/", "")
+def get_raw_url(url_source, pretty_url):
+    if url_source == "github":
+        raw_url = pretty_url.replace("github.com", "raw.githubusercontent.com")
+        raw_url = raw_url.replace("blob/", "")
+
+    if url_source == "pastebin":
+        raw_url = pretty_url.replace("pastebin.com/", "pastebin.com/raw/")
+
     return raw_url
 
 
 def download_script(url):
 
-    # Check if it's a raw URL or a pretty URL
-    url_type = "unknown"
-    if "github.com" in url: url_type = "pretty"
-    if "raw.githubusercontent.com" in url: url_type = "raw"
+    # Work out the source
+    url_source = "unknown"
+    if "github" in url: url_source = "github"
+    if "pastebin.com" in url: url_source = "pastebin"
+    if url_source == "unknown":
+        return "The source could not be identified"
 
-    if url_type == "unknown": return "That github url was not recognised", None, None
-    if url_type == "pretty": raw_url = get_raw_url(url)
-    if url_type == "raw": raw_url = url
+    print (url_source)
 
-    # Parse the url into the relevant bits
-    stuffbefore, url_for_parsing = raw_url.split(".com/")
-    source = "github"
-    try:
-        split_output = url_for_parsing.split("/", 3)
-        gituser = split_output[0]
-        gitrepo = split_output[1]
-        gitbranch = split_output[2]
-        filename = split_output[3]
-    except:
-        return "Could not parse that github url. Please provide a full URL link from github to a file (not a repo)", None, None
+    if url_source == "github":
+        # Check if it's a raw URL or a pretty URL
+        url_type = "unknown"
+        if "github.com" in url: url_type = "pretty"
+        if "raw.githubusercontent.com" in url: url_type = "raw"
 
-    # Download the file from github
+        if url_type == "unknown": return "That github url was not recognised", None, None
+        if url_type == "pretty": raw_url = get_raw_url("github", url)
+        if url_type == "raw": raw_url = url
+
+        # Parse the url into the relevant bits
+        stuffbefore, url_for_parsing = raw_url.split(".com/")
+        source = url_source
+        try:
+            split_output = url_for_parsing.split("/", 3)
+            gituser = split_output[0]
+            gitrepo = split_output[1]
+            gitbranch = split_output[2]
+            filename = split_output[3]
+        except:
+            return "Could not parse that github url. Please provide a full URL link from github to a file (not a repo)", None, None
+
+    if url_source == "pastebin":
+        # Check if it's a raw URL or a pretty URL
+        url_type = "pretty"
+        if "pastebin.com/raw/" in url: url_type = "raw"
+
+        if url_type == "pretty": raw_url = get_raw_url("pastebin", url)
+        if url_type == "raw": raw_url = url
+
+        # Parse the url into the relevant bits
+        source = url_source
+        gituser = ""
+        gitrepo = ""
+        gitbranch = ""
+        filename = raw_url[-8:]
+
+    # Download the file
     try:
         r = requests.get(raw_url)
     except:
         return "An error occurred when trying to download that file - check the url maybe?", None, None
 
     if r.status_code != 200:
-        return "The github server returned invalid status code when trying to download the file", None, None
+        return "The server returned invalid status code when trying to download the file", None, None
 
     # Create new script record
     unique_name = False
