@@ -21,3 +21,4 @@ project/.idea/workspace.xml
 .idea/misc.xml
 migrations/versions/2a303f04949f_.py
 migrations/versions/47baa8972382_.py
+.idea/codeStyles/codeStyleConfig.xml
